@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Movies List</title>        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="style_1.css" />
+        <link rel="stylesheet" type="text/css" href="component.css" />
+        <link rel="stylesheet" type="text/css" href="normalize.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script>
+            function loadData() {
+                fetch('http://localhost:8080/Movie_REST/resources/getmovies/all')
+                        .then(function (response) {
+                            return response.json();
+                        }).then(function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var commentDiv = document.createElement('tr');
+                        commentDiv.innerHTML = '<td data-toggle="modal" data-id="' + data[i].id + '" data-target="#myModal">'
+                                + data[i].title + '</td>';
+                        document.getElementById('showsContainer').appendChild(commentDiv);
+                    }
+                    ;
+                });
+            }
+            $(document).ready(function () {
+                $('#myModal').on('show.bs.modal', function (e) {
+                    var showId = $(e.relatedTarget).attr('data-id');
+//                    console.log(showId);
+                    fetch('http://localhost:8080/Movie_REST/resources/getmovies/all/' + showId)
+                            .then(function (response) {
+//                                console.log(response);
+                                return response.json();
+                            }).then(function (data) {
+                        var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(data.image)));
+                        var image = document.getElementById('image');
+                        image.src = 'data:image/jpg;base64,' + base64String;
+                        document.getElementById('title').innerHTML = data.title;
+                        document.getElementById('director').innerHTML = data.director;
+                        document.getElementById('id').innerHTML = showId;
+                        document.getElementById('producer').innerHTML = data.producer;
+//                        document.getElementById('showDesc').innerHTML = data.description;
+                        console.log(data);
+                    });
+                });
+            });
+        </script>
+
+        <style>
+            /*                        html,
+                                    body {
+                                        height: 100;
+                                        margin: 0 auto;
+                                        background-color: #D3E6D4;
+                                        color: #1E1E1E;
+                                    }    */
+            /*                        .container{
+                                        border-radius: 25px;
+                                        background-color:#FEFEFE;
+                                        background-color: rgba(255,255,255,0.5);
+                                        padding-bottom: 20px;
+                                    }*/
+            /*            .table {
+                            border-radius: 5px;
+                            width: 50%;
+                            margin: 0px auto;
+                            float: none;
+                        }
+            
+                        .table td, .table th {
+                            color: #FFFFFF;
+                            text-align: center;       
+                        }
+                        td:hover {
+                            color: #000000;
+                            background-color: #ffffff;
+                        }*/
+        </style>
+    </head>
+    <body onload="loadData();">
+        <div align="center" style="color:#FFFFFF; font-size: 40px; margin-top: 30px" >List of movies available</div>
+        <div class="container">
+            <form  action="Servlet" method="post" enctype="multipart/form-data">            
+                <h1 style="color: #FFFFFF">Click for details</h1>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                        </tr>
+                    </thead>
+                    <tbody id="showsContainer">
+                    </tbody>
+                </table>
+
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!--Modal content-->
+                        <div class="modal-content" style="background-color: #000000; color: #FFFFFF">
+                            <div class="modal-header" style="background-color: #FFFFFF; color: #000000">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Title: <span id="title"></span></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card" style="margin:0 auto">
+                                    <img class="card-img-top"  id="image" alt="Card image" style="width:100%">
+                                    <div class="card-body">
+                                        <h4 class="card-title" ></h4>
+                                        <span><b>ID: </b></span><span class="card-text" id="id"></span><br>
+                                        <span><b>Director: </b></span><span class="card-text" id="director"></span><br>
+                                        <span><b>Producer: </b></span><span class="card-text" id="producer"></span><br>                                                                
+                                        <a href="#" class="btn btn-primary" style="background-color: #000000; color: #FFFFFF">Select</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"  style="background-color: #000000; color: #FFFFFF">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>     
+
+        <div class="lines">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>    
+    </body>
+</html>
